@@ -1,0 +1,32 @@
+{
+  "index_patterns": ["logs-*"],
+  "priority": 200,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0,
+      "refresh_interval": "5s",
+      "index.lifecycle.name": "logs-30d"
+    },
+    "mappings": {
+      "dynamic_templates": [
+        { "strings_as_keywords": { "match_mapping_type": "string", "mapping": { "type": "keyword", "ignore_above": 1024 } } }
+      ],
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "message": { "type": "text" },
+        "log.message": { "type": "text" },
+        "log.level": { "type": "keyword" },
+        "log.source": { "type": "keyword" },
+        "client.ip": { "type": "ip", "ignore_malformed": true },
+        "http.response.status_code": { "type": "short" },
+        "http.response.body.bytes": { "type": "long" },
+        "event.duration_s": { "type": "float" },
+        "url.original": { "type": "wildcard" },
+        "user_agent.original": { "type": "text", "fields": { "keyword": { "type": "keyword", "ignore_above": 512 } } },
+        "network.internal": { "type": "boolean" },
+        "tags": { "type": "keyword" }
+      }
+    }
+  }
+}
